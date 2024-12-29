@@ -6,3 +6,4 @@ edition = "2021"
 [dependencies]
 nusb = "0.1.12"
 futures-lite = "2.5.0"
+clap = { version = "4.0", features = ["derive"] }
