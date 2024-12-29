@@ -1,6 +1,8 @@
 
 pub mod device_handler {
 
+use std::ops::Range;
+
 use futures_lite::future::block_on;
 use nusb;
 use clap::ValueEnum;
@@ -18,6 +20,33 @@ pub enum Brightness {
     high = 0x24,
     #[allow(non_camel_case_types)]
     max = 0x32,
+}
+
+#[derive(Debug)]
+pub struct RGBColor {
+    r: u8,
+    g: u8,
+    b: u8,
+}
+
+impl RGBColor {
+    pub fn new(_in: u32) -> RGBColor {
+        return RGBColor{r: (_in  >> 16 & 0xff) as u8, g: (_in >> 8 & 0xff) as u8, b: (_in & 0xff) as u8};
+    }
+}
+
+#[derive(ValueEnum, Clone, Copy, PartialEq, Eq, Debug)]
+#[repr(u32)]
+pub enum ColorProfiles {
+    #[allow(non_camel_case_types)]
+    white = 0xffffff,
+    #[allow(non_camel_case_types)]
+    red = 0xff0000,
+    #[allow(non_camel_case_types)]
+    blue = 0x0000ff,
+    #[allow(non_camel_case_types)]
+    green = 0x00ff00
+
 }
 
 struct SupportedDevice<'a> {
@@ -65,6 +94,16 @@ impl DeviceHandler {
 
     pub fn set_brigthness(&self, brightness: Brightness) {
         self.send_request(&[0x08, 0x02, 0x01, 0x05, brightness as u8, 0x08, 0x00, 0x00]);
+    }
+
+    pub fn set_color(&self, area:u8, color: &RGBColor) {
+        self.send_request(&[0x14, 0x00, area, color.r, color.g, color.b, 0x00, 0x00]);
+    }
+
+    pub fn set_one_color_to_all_areas(&self, color: &RGBColor) {
+        for i in 1..5 {
+            self.set_color(i, color);
+        }
     }
 }
 

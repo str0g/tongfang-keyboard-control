@@ -4,7 +4,9 @@ pub mod device_handler;
 
 use device_handler::device_handler::{
     DeviceHandler,
-    Brightness
+    Brightness,
+    ColorProfiles,
+    RGBColor
 };
 
 #[derive(Parser)]
@@ -14,6 +16,11 @@ struct Args {
         long,
         value_enum)]
     brigthness: Option<Brightness>,
+    #[arg(
+        short,
+        long,
+        value_enum)]
+    color: Option<ColorProfiles>,
 }
 
 fn main() {
@@ -21,8 +28,11 @@ fn main() {
     println!("{:#?}", dev.name);
 
     let  args = Args::parse();
-    println!("args: {:#?}", args.brigthness);
     if !args.brigthness.is_none() {
         dev.set_brigthness(args.brigthness.unwrap());
+    }
+    if !args.color.is_none() {
+        let color_profile = RGBColor::new(args.color.unwrap() as u32);
+        dev.set_color(1, &color_profile);
     }
 }
