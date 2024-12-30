@@ -1,8 +1,9 @@
 
 pub mod device_handler {
 
+use std::io::ErrorKind;
 use futures_lite::future::block_on;
-use nusb;
+use nusb::{self, };
 use clap::ValueEnum;
 
 #[derive(ValueEnum, Clone, Copy, PartialEq, Eq, Debug)]
@@ -199,7 +200,15 @@ impl DeviceHandler {
             let obj = &SUPPORTED_DEVICES[i];
             let _dev_info = match nusb::list_devices().unwrap()
                             .find(|dev| dev.vendor_id() == obj.vendor_id && dev.product_id() == obj.product_id) {
-                Some(dev_info) => { return DeviceHandler { dev: dev_info.open().expect("failed to open device"), name: obj.name }; },
+                Some(dev_info) => {
+                        let _dev = dev_info.open().expect("failed to open device");
+                        if _dev.attach_kernel_driver(1).is_err_and(|_dev| _dev.kind() == ErrorKind::ResourceBusy) {
+                            _dev.detach_kernel_driver(1).expect("initial attachment failed");
+                        } else {
+                            _dev.detach_kernel_driver(1).expect("restarting attachment");
+                        }
+                    return DeviceHandler { dev: _dev, name: obj.name };
+                    },
                 None => { println!("Skipping {}", obj.name); },
             };
             i += 1;
