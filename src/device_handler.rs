@@ -1,8 +1,6 @@
 
 pub mod device_handler {
 
-use std::ops::Range;
-
 use futures_lite::future::block_on;
 use nusb;
 use clap::ValueEnum;
@@ -39,15 +37,82 @@ impl RGBColor {
 #[repr(u32)]
 pub enum ColorProfiles {
     #[allow(non_camel_case_types)]
-    white = 0xffffff,
+    blue = 0x0000ff,
+    #[allow(non_camel_case_types)]
+    cyan = 0x00ffff,
+    #[allow(non_camel_case_types)]
+    gold = 0xff4600,
+    #[allow(non_camel_case_types)]
+    green = 0x00ff00,
+    #[allow(non_camel_case_types)]
+    orange = 0xff2800,
+    #[allow(non_camel_case_types)]
+    pink = 0xff00c8,
+    #[allow(non_camel_case_types)]
+    purple = 0x8800c8,
     #[allow(non_camel_case_types)]
     red = 0xff0000,
     #[allow(non_camel_case_types)]
-    blue = 0x0000ff,
+    white = 0xffffff,
     #[allow(non_camel_case_types)]
-    green = 0x00ff00
-
+    yellow = 0xffff66,
 }
+
+#[derive(ValueEnum, Clone, Copy)]
+#[repr(u8)]
+pub enum LightPattern {
+    #[allow(non_camel_case_types)]
+    r#static = 0x01,
+    #[allow(non_camel_case_types)]
+    breathing = 0x02,
+    #[allow(non_camel_case_types)]
+    wave = 0x03,
+    #[allow(non_camel_case_types)]
+    rainbow = 0x04,
+    #[allow(non_camel_case_types)]
+    flash = 0x12,
+    #[allow(non_camel_case_types)]
+    mix = 0x13,
+}
+
+#[derive(Clone, Copy)]
+#[repr(u8)]
+enum Direction {
+    #[allow(non_camel_case_types)]
+    none = 0x0,
+    #[allow(non_camel_case_types)]
+    right = 0x01,
+    #[allow(non_camel_case_types)]
+    left = 0x02,
+}
+
+struct LightProfile {
+    pattern: LightPattern,
+    speed: u8,
+    direction: Direction
+}
+
+const LIGHT_PROFILES: &'static [&'static LightProfile; LightPattern::mix as usize] = &[
+        &LightProfile{pattern: LightPattern::r#static, speed: 1, direction: Direction::none},
+        &LightProfile{pattern: LightPattern::breathing, speed: 5, direction: Direction::none},
+        &LightProfile{pattern: LightPattern::wave, speed: 10, direction: Direction::right},
+        &LightProfile{pattern: LightPattern::rainbow, speed: 0, direction: Direction::none},
+        &LightProfile{pattern: LightPattern::wave, speed: 5, direction: Direction::right},
+        &LightProfile{pattern: LightPattern::wave, speed: 5, direction: Direction::right},
+        &LightProfile{pattern: LightPattern::wave, speed: 5, direction: Direction::right},
+        &LightProfile{pattern: LightPattern::wave, speed: 5, direction: Direction::right},
+        &LightProfile{pattern: LightPattern::wave, speed: 5, direction: Direction::right},
+        &LightProfile{pattern: LightPattern::wave, speed: 5, direction: Direction::right},
+        &LightProfile{pattern: LightPattern::wave, speed: 5, direction: Direction::right},
+        &LightProfile{pattern: LightPattern::wave, speed: 5, direction: Direction::right},
+        &LightProfile{pattern: LightPattern::wave, speed: 5, direction: Direction::right},
+        &LightProfile{pattern: LightPattern::wave, speed: 5, direction: Direction::right},
+        &LightProfile{pattern: LightPattern::wave, speed: 5, direction: Direction::right},
+        &LightProfile{pattern: LightPattern::wave, speed: 5, direction: Direction::right},
+        &LightProfile{pattern: LightPattern::wave, speed: 5, direction: Direction::right},
+        &LightProfile{pattern: LightPattern::flash, speed: 3, direction: Direction::none},
+        &LightProfile{pattern: LightPattern::mix, speed: 9, direction: Direction::left},
+];
 
 struct SupportedDevice<'a> {
     name : &'a str,
@@ -55,7 +120,7 @@ struct SupportedDevice<'a> {
     product_id: u16,
 }
 
-const  SUPPORTED_DEVICES: &'static [&'static SupportedDevice; 2] = &[
+const SUPPORTED_DEVICES: &'static [&'static SupportedDevice; 2] = &[
     &SupportedDevice{vendor_id: 0x048d, product_id: 0x00, name: "place-holder"},
     &SupportedDevice{vendor_id: 0x048d, product_id: 0xce00, name: "xmg neo 17 e21"}
 ];
@@ -100,10 +165,16 @@ impl DeviceHandler {
         self.send_request(&[0x14, 0x00, area, color.r, color.g, color.b, 0x00, 0x00]);
     }
 
-    pub fn set_one_color_to_all_areas(&self, color: &RGBColor) {
-        for i in 1..5 {
-            self.set_color(i, color);
-        }
+    pub fn set_profile(&self, profile: LightPattern) {
+        let brightness = Brightness::max as u8;
+        let profile = LIGHT_PROFILES[(profile as usize)-1];
+        self.send_request(&[0x08, 0x02,
+                profile.pattern as u8,
+                profile.speed,
+                brightness,
+                0x08,
+                profile.direction as u8,
+                0x01]);
     }
 }
 
