@@ -1,0 +1,14 @@
+post_install() {
+  udevadm control --reload-rules
+  udevadm trigger
+  systemctl enable tongfang-keyboard-control.service
+}
+
+pre_remove() {
+  systemctl disable tongfang-keyboard-control.service
+}
+
+post_remove() {
+  udevadm control --reload-rules
+  udevadm trigger
+}
