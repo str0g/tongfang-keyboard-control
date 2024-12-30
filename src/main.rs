@@ -3,7 +3,7 @@ use clap::Parser;
 pub mod device_handler;
 
 use device_handler::device_handler::{
-    Brightness, ColorProfiles, DeviceHandler, LightPattern, RGBColor
+    Brightness, ColorProfiles, DeviceHandler, LightPatternPublic, RGBColor
 };
 
 #[derive(Parser)]
@@ -22,7 +22,7 @@ struct Args {
         short,
         long,
         value_enum)]
-    pattern: Option<LightPattern>,
+    pattern: Option<LightPatternPublic>,
 }
 
 fn main() {
@@ -38,7 +38,6 @@ fn main() {
         dev.set_color(1, &color_profile);
     }
     if !args.pattern.is_none() {
-        println!("@TODO");
         dev.set_profile(args.pattern.unwrap());
     }
 }

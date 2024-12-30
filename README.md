@@ -23,6 +23,11 @@ Arch Linux user `makepkg` other distribution users follow whats inside `package/
 ## Contributing
 Capture usb communication with `wiresharek` (require `usbmon` kernel module) and put data in request or implement missing stuff your self.
 
+## Whats missing
+- Save to bios (VirtualBox with xmg controle center on Windows will do the job)
+- Custom color per key
+- gamemode
+
 ## License
 Mozilla Public License Version 2.0
 

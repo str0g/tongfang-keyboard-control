@@ -60,7 +60,48 @@ pub enum ColorProfiles {
 
 #[derive(ValueEnum, Clone, Copy)]
 #[repr(u8)]
-pub enum LightPattern {
+pub enum LightPatternPublic {
+    #[allow(non_camel_case_types)]
+    r#static = 0x00,
+    #[allow(non_camel_case_types)]
+    breathing,
+    #[allow(non_camel_case_types)]
+    wave_left,
+    #[allow(non_camel_case_types)]
+    wave_right,
+    #[allow(non_camel_case_types)]
+    wave_up,
+    #[allow(non_camel_case_types)]
+    wave_down,
+    #[allow(non_camel_case_types)]
+    reactive,
+    #[allow(non_camel_case_types)]
+    rainbow,
+    #[allow(non_camel_case_types)]
+    ripple,
+    #[allow(non_camel_case_types)]
+    ripple_on_input,
+    #[allow(non_camel_case_types)]
+    marquee,
+    #[allow(non_camel_case_types)]
+    raindrop,
+    #[allow(non_camel_case_types)]
+    aurora,
+    #[allow(non_camel_case_types)]
+    aurora_on_input,
+    #[allow(non_camel_case_types)]
+    gamemod,
+    #[allow(non_camel_case_types)]
+    spark,
+    #[allow(non_camel_case_types)]
+    spark_on_input,
+    #[allow(non_camel_case_types)]
+    music,
+}
+
+#[derive(Debug, Clone, Copy)]
+#[repr(u8)]
+enum LightPattern {
     #[allow(non_camel_case_types)]
     r#static = 0x01,
     #[allow(non_camel_case_types)]
@@ -68,14 +109,26 @@ pub enum LightPattern {
     #[allow(non_camel_case_types)]
     wave = 0x03,
     #[allow(non_camel_case_types)]
-    rainbow = 0x04,
+    reactive = 0x04,
     #[allow(non_camel_case_types)]
-    flash = 0x12,
+    rainbow = 0x05,
     #[allow(non_camel_case_types)]
-    mix = 0x13,
+    ripple = 0x06,
+    #[allow(non_camel_case_types)]
+    marquee = 0x09,
+    #[allow(non_camel_case_types)]
+    raindrop = 0x0a,
+    #[allow(non_camel_case_types)]
+    aurora = 0x0e,
+    #[allow(non_camel_case_types)]
+    gamemod = 0x0f,
+    #[allow(non_camel_case_types)]
+    spark = 0x11,
+    #[allow(non_camel_case_types)]
+    music = 0x22,
 }
 
-#[derive(Clone, Copy)]
+#[derive(Debug, Clone, Copy)]
 #[repr(u8)]
 enum Direction {
     #[allow(non_camel_case_types)]
@@ -84,34 +137,43 @@ enum Direction {
     right = 0x01,
     #[allow(non_camel_case_types)]
     left = 0x02,
+    #[allow(non_camel_case_types)]
+    up = 0x03,
+    #[allow(non_camel_case_types)]
+    down = 0x04,
+
 }
 
+#[derive(Debug)]
 struct LightProfile {
     pattern: LightPattern,
     speed: u8,
     direction: Direction
 }
 
-const LIGHT_PROFILES: &'static [&'static LightProfile; LightPattern::mix as usize] = &[
+const LIGHT_PROFILES: &'static [&'static LightProfile; 18] = &[
         &LightProfile{pattern: LightPattern::r#static, speed: 1, direction: Direction::none},
-        &LightProfile{pattern: LightPattern::breathing, speed: 5, direction: Direction::none},
+        &LightProfile{pattern: LightPattern::breathing, speed: 5, direction: Direction::none},//1
+        // wave left, right, up, down
+        &LightProfile{pattern: LightPattern::wave, speed: 10, direction: Direction::left},//2
         &LightProfile{pattern: LightPattern::wave, speed: 10, direction: Direction::right},
+        &LightProfile{pattern: LightPattern::wave, speed: 10, direction: Direction::up},
+        &LightProfile{pattern: LightPattern::wave, speed: 10, direction: Direction::down},
         &LightProfile{pattern: LightPattern::rainbow, speed: 0, direction: Direction::none},
-        &LightProfile{pattern: LightPattern::wave, speed: 5, direction: Direction::right},
-        &LightProfile{pattern: LightPattern::wave, speed: 5, direction: Direction::right},
-        &LightProfile{pattern: LightPattern::wave, speed: 5, direction: Direction::right},
-        &LightProfile{pattern: LightPattern::wave, speed: 5, direction: Direction::right},
-        &LightProfile{pattern: LightPattern::wave, speed: 5, direction: Direction::right},
-        &LightProfile{pattern: LightPattern::wave, speed: 5, direction: Direction::right},
-        &LightProfile{pattern: LightPattern::wave, speed: 5, direction: Direction::right},
-        &LightProfile{pattern: LightPattern::wave, speed: 5, direction: Direction::right},
-        &LightProfile{pattern: LightPattern::wave, speed: 5, direction: Direction::right},
-        &LightProfile{pattern: LightPattern::wave, speed: 5, direction: Direction::right},
-        &LightProfile{pattern: LightPattern::wave, speed: 5, direction: Direction::right},
-        &LightProfile{pattern: LightPattern::wave, speed: 5, direction: Direction::right},
-        &LightProfile{pattern: LightPattern::wave, speed: 5, direction: Direction::right},
-        &LightProfile{pattern: LightPattern::flash, speed: 3, direction: Direction::none},
-        &LightProfile{pattern: LightPattern::mix, speed: 9, direction: Direction::left},
+        &LightProfile{pattern: LightPattern::reactive, speed: 5, direction: Direction::none},//7
+        // ripple light on its own none or on input right
+        &LightProfile{pattern: LightPattern::ripple, speed: 5, direction: Direction::none},//8
+        &LightProfile{pattern: LightPattern::ripple, speed: 5, direction: Direction::right},
+        &LightProfile{pattern: LightPattern::marquee, speed: 5, direction: Direction::none},
+        &LightProfile{pattern: LightPattern::raindrop, speed: 5, direction: Direction::right},//11
+        // aurora light on its own none or on input right
+        &LightProfile{pattern: LightPattern::aurora, speed: 5, direction: Direction::none},//12
+        &LightProfile{pattern: LightPattern::aurora, speed: 5, direction: Direction::right},
+        &LightProfile{pattern: LightPattern::gamemod, speed: 5, direction: Direction::none},//14
+        // spark light on its own none or on input right
+        &LightProfile{pattern: LightPattern::spark, speed: 5, direction: Direction::none},//15
+        &LightProfile{pattern: LightPattern::spark, speed: 5, direction: Direction::right},
+        &LightProfile{pattern: LightPattern::music, speed: 9, direction: Direction::left},
 ];
 
 struct SupportedDevice<'a> {
@@ -120,8 +182,7 @@ struct SupportedDevice<'a> {
     product_id: u16,
 }
 
-const SUPPORTED_DEVICES: &'static [&'static SupportedDevice; 2] = &[
-    &SupportedDevice{vendor_id: 0x048d, product_id: 0x00, name: "place-holder"},
+const SUPPORTED_DEVICES: &'static [&'static SupportedDevice; 1] = &[
     &SupportedDevice{vendor_id: 0x048d, product_id: 0xce00, name: "xmg neo 17 e21"}
 ];
 
@@ -165,9 +226,10 @@ impl DeviceHandler {
         self.send_request(&[0x14, 0x00, area, color.r, color.g, color.b, 0x00, 0x00]);
     }
 
-    pub fn set_profile(&self, profile: LightPattern) {
+    pub fn set_profile(&self, profile: LightPatternPublic) {
         let brightness = Brightness::max as u8;
-        let profile = LIGHT_PROFILES[(profile as usize)-1];
+        let profile = LIGHT_PROFILES[profile as usize];
+//        println!("{:#?}", profile);
         self.send_request(&[0x08, 0x02,
                 profile.pattern as u8,
                 profile.speed,
