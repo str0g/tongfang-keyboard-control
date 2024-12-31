@@ -5,7 +5,7 @@ After=udevd.service
 [Service]
 Type=oneshot
 RemainAfterExit=no
-User=plugdev
+DynamicUser=yes
 Group=plugdev
 ExecStart=/usr/bin/tongfang-keyboard-control -b low -c yellow
 
