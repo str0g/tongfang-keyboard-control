@@ -26,10 +26,11 @@ struct Args {
 }
 
 fn main() {
+    let  args = Args::parse();
+
     let dev = DeviceHandler::new();
     println!("{:#?}", dev.name);
 
-    let  args = Args::parse();
     if !args.brigthness.is_none() {
         dev.set_brigthness(args.brigthness.unwrap());
     }

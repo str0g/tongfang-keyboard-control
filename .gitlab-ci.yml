@@ -5,22 +5,111 @@
 # Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
 # Note that environment variables can be set in several places
 # See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
-stages:
-- build
-- test
-- deploy
-- review
-- dast
-- staging
-- canary
-- production
-- incremental rollout 10%
-- incremental rollout 25%
-- incremental rollout 50%
-- incremental rollout 100%
-- performance
-- cleanup
-sast:
+#
+
+variables:
+  DOCKER_REGISTRY: "localhost:5555"
+
+build-arch:
+  stage: build
+  image: localhost:5555/archlinux_rust:latest
+  script:
+    - cargo build --target-dir arch
+    - cargo build --target-dir arch --release
+  artifacts:
+    paths:
+      - "arch"
+  parallel: 1
+
+test-arch:
   stage: test
-include:
-- template: Auto-DevOps.gitlab-ci.yml
+  image: localhost:5555/archlinux_rust:latest
+  script:
+    - arch/debug/tongfang-keyboard-control --help
+    - arch/release/tongfang-keyboard-control --help
+  dependencies:
+    - build-arch
+
+deploy-arch:
+  stage: deploy
+  image: localhost:5555/archlinux_rust:latest
+  services:
+  script:
+    - echo "push package to artifacts?"
+  dependencies:
+    - test-arch
+
+build-fedora:
+  stage: build
+  image: localhost:5555/fedora41_rust:latest
+  script:
+    - cargo build --target-dir fedora
+    - cargo build --target-dir fedora --release
+  artifacts:
+    paths:
+      - "fedora"
+
+test-fedora:
+  stage: test
+  image: localhost:5555/fedora41_rust:latest
+  script:
+    - fedora/debug/tongfang-keyboard-control --help
+    - fedora/release/tongfang-keyboard-control --help
+  dependencies:
+    - build-fedora
+
+deploy-fedora:
+  stage: deploy
+  image: localhost:5555/fedora41_rust:latest
+  services:
+  script:
+    - echo "push package to artifacts?"
+  dependencies:
+    - test-fedora
+
+build-debian:
+  stage: build
+  image: rust:1.83.0-slim-bookworm
+  script:
+    - cargo build --target-dir debian
+    - cargo build --target-dir debian --release
+  artifacts:
+    paths:
+      - "debian"
+
+test-debian:
+  stage: test
+  image: rust:1.83.0-slim-bookworm
+  script:
+    - debian/debug/tongfang-keyboard-control --help
+    - debian/release/tongfang-keyboard-control --help
+  dependencies:
+    - build-debian
+
+deploy-debian:
+  stage: deploy
+  image: rust:1.83.0-slim-bookworm
+  script:
+    - echo "push package to artifacts?"
+  dependencies:
+    - test-debian
+
+# stages:
+# - build
+# - test
+# - deploy
+# - review
+# - dast
+# - staging
+# - canary
+# - production
+# - incremental rollout 10%
+# - incremental rollout 25%
+# - incremental rollout 50%
+# - incremental rollout 100%
+# - performance
+# - cleanup
+# sast:
+#   stage: test
+# include:
+# - template: Auto-DevOps.gitlab-ci.yml
