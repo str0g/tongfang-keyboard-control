@@ -1,7 +1,7 @@
 # Maintainer: Łukasz Buśko <lukasz.busko@guns4hire.cc>
 
 pkgname=tongfang-keyboard-control-git
-pkgver=0.1
+pkgver=1.0.0
 pkgrel=1
 arch=('x86_64')
 
