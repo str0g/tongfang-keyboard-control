@@ -3,11 +3,11 @@ services:
     container_name: archlinux_rust
     build:
       context: .
-      dockerfile: ./docker/arch/Dockerfile
+      dockerfile: ./arch/Dockerfile
     image: archlinux_rust:latest
   fedora41_rust:
     container_name: fedora41_rust
     build:
       context: .
-      dockerfile: ./docker/fedora/Dockerfile
+      dockerfile: ./fedora/Dockerfile
     image: fedora41_rust:latest

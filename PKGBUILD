@@ -9,9 +9,7 @@ depends=('rust'
 )
 makedepends=('git' 'udev' 'systemd')
 
-#source=("git+https://github.com/str0g/tongfang-keyboard-control-git")
-source=("git+file:///home/lukasz/repos/g4h/drivers/tongfang-keyboard-control")
-#source=("git+file:///home/<user>/<path>/tongfang-keyboard-control")
+source=("git+https://github.com/str0g/tongfang-keyboard-control-git")
 sha256sums=('SKIP')
 
 pkgdesc="tongfang keyboard control utility"
@@ -19,12 +17,11 @@ license=('MPL')
 install=hook.install
 
 build() {
-  cd $srcdir/tongfang-keyboard-control
   cargo build --release
 }
 
 package() {
-  currnet_srcdir="$srcdir/tongfang-keyboard-control"
+  currnet_srcdir=".."
   install -dm755 "$pkgdir/usr/bin"
   install -Dm755 "$currnet_srcdir/target/release/tongfang-keyboard-control" "$pkgdir/usr/bin/"
   #

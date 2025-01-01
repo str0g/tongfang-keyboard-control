@@ -1,7 +1,8 @@
 # tongfang-keyboard-control
 
 ## Getting started
-Check with `lsub` if device identification matches your machine if not adjust `examples/99-keyboard.rules`
+- Clone repostiory with `git clone --depth=1`.
+- Check with `lsub` if device identification matches your machine if not adjust `examples/99-keyboard.rules`
 
 ## tongfang-keyboard-control
 Is application to use advance capabilities of laptop keyboard.
@@ -15,7 +16,7 @@ Is application to use advance capabilities of laptop keyboard.
 Application lets user change color/brightness/light pattern, additionally can be integrated into systemd so desire keyboard behavior is going to be setup during system start.
 
 ## Installation
-Arch Linux user `makepkg` other distribution users follow whats inside `package/PKGBUILD` and `package/hook.install`.
+Arch Linux users `makepkg -e` other distribution users follow what is inside `package/PKGBUILD` and `package/hook.install`.
 
 ## Usage
 `tongfang-keyboard-control --help`
