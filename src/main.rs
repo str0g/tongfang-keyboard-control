@@ -1,9 +1,13 @@
 use clap::Parser;
 
 pub mod device_handler;
+pub mod rgbcolor;
+pub mod light_pattern;
 
+use rgbcolor::rgbcolor::{RGBColor, ColorProfiles};
+use light_pattern::light_pattern::LightPatternPublic;
 use device_handler::device_handler::{
-    Brightness, ColorProfiles, DeviceHandler, LightPatternPublic, RGBColor
+    Brightness, DeviceHandler
 };
 
 #[derive(Parser)]
