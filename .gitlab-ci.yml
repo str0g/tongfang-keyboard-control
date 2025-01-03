@@ -19,7 +19,7 @@ build-arch:
     - chown -R build:build $(pwd)/src
     - su -c "makepkg -e" build
     - chown -R root:root $(pwd)
-    - mv tongfang-keyboard-control-git-1.0.0-1-x86_64.pkg.tar.zst arch/
+    - mv tongfang-keyboard-control-git-1.0.1-1-x86_64.pkg.tar.zst arch/
   artifacts:
     paths:
       - "arch"
@@ -31,7 +31,7 @@ test-arch:
   script:
     - cargo test --target-dir arch
     - arch/debug/tongfang-keyboard-control --help
-    - pacman -U --noconfirm arch/tongfang-keyboard-control-git-1.0.0-1-x86_64.pkg.tar.zst
+    - pacman -U --noconfirm arch/tongfang-keyboard-control-git-1.0.1-1-x86_64.pkg.tar.zst
     - tongfang-keyboard-control --help
   dependencies:
     - build-arch
