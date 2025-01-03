@@ -24,6 +24,8 @@ pub enum LightPatternPublic {
     #[allow(non_camel_case_types)]
     reactive,
     #[allow(non_camel_case_types)]
+    reactive_on_input,
+    #[allow(non_camel_case_types)]
     rainbow,
     #[allow(non_camel_case_types)]
     ripple,
@@ -99,27 +101,28 @@ pub struct LightProfile {
     pub direction: Direction
 }
 
-pub const LIGHT_PROFILES: &'static [&'static LightProfile; 18] = &[
+pub const LIGHT_PROFILES: &'static [&'static LightProfile; 19] = &[
         &LightProfile{pattern: LightPattern::r#static, speed: 1, direction: Direction::none},
-        &LightProfile{pattern: LightPattern::breathing, speed: 5, direction: Direction::none},//1
+        &LightProfile{pattern: LightPattern::breathing, speed: 5, direction: Direction::none},
         // wave left, right, up, down
-        &LightProfile{pattern: LightPattern::wave, speed: 10, direction: Direction::left},//2
+        &LightProfile{pattern: LightPattern::wave, speed: 10, direction: Direction::left},
         &LightProfile{pattern: LightPattern::wave, speed: 10, direction: Direction::right},
         &LightProfile{pattern: LightPattern::wave, speed: 10, direction: Direction::up},
         &LightProfile{pattern: LightPattern::wave, speed: 10, direction: Direction::down},
         &LightProfile{pattern: LightPattern::reactive, speed: 5, direction: Direction::none},
-        &LightProfile{pattern: LightPattern::rainbow, speed: 0, direction: Direction::none},//7
+        &LightProfile{pattern: LightPattern::reactive, speed: 5, direction: Direction::right},
+        &LightProfile{pattern: LightPattern::rainbow, speed: 0, direction: Direction::none},
         // ripple light on its own none or on input right
-        &LightProfile{pattern: LightPattern::ripple, speed: 5, direction: Direction::none},//8
+        &LightProfile{pattern: LightPattern::ripple, speed: 5, direction: Direction::none},
         &LightProfile{pattern: LightPattern::ripple, speed: 5, direction: Direction::right},
         &LightProfile{pattern: LightPattern::marquee, speed: 5, direction: Direction::none},
-        &LightProfile{pattern: LightPattern::raindrop, speed: 5, direction: Direction::right},//11
+        &LightProfile{pattern: LightPattern::raindrop, speed: 5, direction: Direction::right},
         // aurora light on its own none or on input right
-        &LightProfile{pattern: LightPattern::aurora, speed: 5, direction: Direction::none},//12
+        &LightProfile{pattern: LightPattern::aurora, speed: 5, direction: Direction::none},
         &LightProfile{pattern: LightPattern::aurora, speed: 5, direction: Direction::right},
-        &LightProfile{pattern: LightPattern::gamemod, speed: 5, direction: Direction::none},//14
+        &LightProfile{pattern: LightPattern::gamemod, speed: 5, direction: Direction::none},
         // spark light on its own none or on input right
-        &LightProfile{pattern: LightPattern::spark, speed: 5, direction: Direction::none},//15
+        &LightProfile{pattern: LightPattern::spark, speed: 5, direction: Direction::none},
         &LightProfile{pattern: LightPattern::spark, speed: 5, direction: Direction::right},
         &LightProfile{pattern: LightPattern::music, speed: 9, direction: Direction::left},
 ];
@@ -130,6 +133,7 @@ pub fn priv_test_profile_address() {
     let mut exp = None;
     for i in LightPatternPublic::r#static as usize..LightPatternPublic::music as usize {
         if ((LightPatternPublic::wave_left as usize) < i) && (i <= LightPatternPublic::wave_down as usize) {
+        } else if ((LightPatternPublic::reactive as usize) < i) && (i <= LightPatternPublic::reactive_on_input as usize) {
         } else if ((LightPatternPublic::ripple as usize) < i) && (i <= LightPatternPublic::ripple_on_input as usize) {
         } else if ((LightPatternPublic::aurora as usize) < i) && (i <= LightPatternPublic::aurora_on_input as usize) {
         } else if ((LightPatternPublic::spark as usize) < i) && (i <= LightPatternPublic::spark_on_input as usize) {
