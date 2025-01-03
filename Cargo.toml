@@ -2,6 +2,15 @@
 name = "tongfang-keyboard-control"
 version = "1.0.0"
 edition = "2021"
+license = "MPL-2.0"
+repository = "https://github.com/str0g/tongfang-keyboard-control.git"
+homepage = "https://github.com/str0g/tongfang-keyboard-control"
+authors = ["Łukasz Buśko lukasz.busko@guns4hire.cc"]
+readme = "README.md"
+categories = ["hardware-support"]
+keywords = ["usb", "hardware", "laptop", "xmg", "tuxedo"]
+description = "tongfang keyboard control"
+rust-version = "1.83"
 
 [dependencies]
 nusb = "0.1.12"

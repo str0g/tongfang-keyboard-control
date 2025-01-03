@@ -14,6 +14,7 @@ build-arch:
   stage: build
   image: localhost:5555/archlinux_rust:latest
   script:
+    - cargo package --target-dir arch
     - cargo build --target-dir arch
     - chown -R build:build $(pwd)/src
     - su -c "makepkg -e" build
@@ -40,7 +41,7 @@ deploy-arch:
   image: localhost:5555/archlinux_rust:latest
   services:
   script:
-    - echo "push package to artifacts?"
+    - echo "@TODO push to create.io on condition"
   dependencies:
     - test-arch
 
