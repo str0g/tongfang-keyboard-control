@@ -75,7 +75,7 @@ pub enum LightPattern {
     #[allow(non_camel_case_types)]
     spark = 0x11,
     #[allow(non_camel_case_types)]
-    music = 0x22,
+    music = 0x21,
 }
 
 #[derive(Debug, Clone, Copy)]
