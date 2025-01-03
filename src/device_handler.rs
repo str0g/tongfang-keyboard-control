@@ -5,7 +5,6 @@ use std::io::ErrorKind;
 use futures_lite::future::block_on;
 use nusb::{self, };
 use clap::ValueEnum;
-
 pub use crate::rgbcolor::rgbcolor::RGBColor;
 pub use crate::light_pattern::light_pattern::{LightPatternPublic, LIGHT_PROFILES};
 

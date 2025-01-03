@@ -76,16 +76,6 @@ pub enum LightPattern {
     music = 0x22,
 }
 
-#[cfg(test)]
-pub fn test_only_first() -> LightPatternIter {
-    return LightPattern::iter();
-}
-
-#[cfg(test)]
-pub fn test_only_next(obj:& mut LightPatternIter) -> Option<LightPattern> {
-    return obj.next();
-}
-
 #[derive(Debug, Clone, Copy)]
 #[repr(u8)]
 pub enum Direction {
@@ -134,29 +124,30 @@ pub const LIGHT_PROFILES: &'static [&'static LightProfile; 18] = &[
         &LightProfile{pattern: LightPattern::music, speed: 9, direction: Direction::left},
 ];
 
+#[test]
+pub fn priv_test_profile_address() {
+    let mut iter_exp = LightPattern::iter();
+    let mut exp = None;
+    for i in LightPatternPublic::r#static as usize..LightPatternPublic::music as usize {
+        if ((LightPatternPublic::wave_left as usize) < i) && (i <= LightPatternPublic::wave_down as usize) {
+        } else if ((LightPatternPublic::ripple as usize) < i) && (i <= LightPatternPublic::ripple_on_input as usize) {
+        } else if ((LightPatternPublic::aurora as usize) < i) && (i <= LightPatternPublic::aurora_on_input as usize) {
+        } else if ((LightPatternPublic::spark as usize) < i) && (i <= LightPatternPublic::spark_on_input as usize) {
+        } else {
+            exp = iter_exp.next();
+        }
+        assert_eq!(LIGHT_PROFILES[i].pattern, exp.unwrap());
+    }
+}
+
 }
 
 #[cfg(test)]
 mod test {
-    use std::usize;
-
-    use crate::light_pattern::light_pattern::{LightPatternPublic, LightPattern, LIGHT_PROFILES, test_only_first, test_only_next};
+    use crate::light_pattern::light_pattern::{priv_test_profile_address, };
 
     #[test]
-    fn test_profile_address() {
-        assert_eq!(LIGHT_PROFILES[LightPatternPublic::r#static as usize].pattern, LightPattern::r#static);
-        assert_eq!(LIGHT_PROFILES[LightPatternPublic::breathing as usize].pattern, LightPattern::breathing);
-        let mut iter_exp = test_only_first();
-        let mut exp = None;
-        for i in LightPatternPublic::r#static as usize..LightPatternPublic::music as usize {
-            if ((LightPatternPublic::wave_left as usize) < i) && (i <= LightPatternPublic::wave_down as usize) {
-            } else if ((LightPatternPublic::ripple as usize) < i) && (i <= LightPatternPublic::ripple_on_input as usize) {
-            } else if ((LightPatternPublic::aurora as usize) < i) && (i <= LightPatternPublic::aurora_on_input as usize) {
-            } else if ((LightPatternPublic::spark as usize) < i) && (i <= LightPatternPublic::spark_on_input as usize) {
-            } else {
-                exp = test_only_next(&mut iter_exp);
-            }
-            assert_eq!(LIGHT_PROFILES[i].pattern, exp.unwrap());
-        }
+    fn unit_test_profile_address() {
+        priv_test_profile_address();
     }
 }
