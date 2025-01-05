@@ -18,3 +18,7 @@ futures-lite = "2.5.0"
 clap = { version = "4.0", features = ["derive"] }
 strum = { version = "0.26", features = ["derive"] }
 strum_macros = "0.26.4"
+
+[build-dependencies]
+clap_complete = "4.5.40"
+clap = { version = "4.0", features = ["derive"] }

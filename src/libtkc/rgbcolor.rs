@@ -40,7 +40,7 @@ impl RGBColor {
 
 #[cfg(test)]
 mod tests {
-    use crate::rgbcolor::{RGBColor, ColorProfiles};
+    use crate::libtkc::rgbcolor::{RGBColor, ColorProfiles};
 
     #[test]
     fn test_conersion_white() {

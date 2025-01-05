@@ -1,33 +1,11 @@
+mod libtkc;
+mod cmdline;
+
 use clap::Parser;
 
-pub mod brightness;
-pub mod device_handler;
-pub mod light_pattern;
-pub mod rgbcolor;
-
-use brightness::Brightness;
-use device_handler::DeviceHandler;
-use light_pattern::LightPatternPublic;
-use rgbcolor::{RGBColor, ColorProfiles};
-
-#[derive(Parser)]
-struct Args {
-    #[arg(
-        short,
-        long,
-        value_enum)]
-    brigthness: Option<Brightness>,
-    #[arg(
-        short,
-        long,
-        value_enum)]
-    color: Option<ColorProfiles>,
-    #[arg(
-        short,
-        long,
-        value_enum)]
-    pattern: Option<LightPatternPublic>,
-}
+use cmdline::Args;
+use libtkc::device_handler::DeviceHandler;
+use libtkc::rgbcolor::RGBColor;
 
 fn main() {
     let  args = Args::parse();

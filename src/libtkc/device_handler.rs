@@ -2,9 +2,9 @@ use std::io::ErrorKind;
 use futures_lite::future::block_on;
 use nusb::{self, };
 
-use crate::brightness::Brightness;
-use crate::rgbcolor::RGBColor;
-use crate::light_pattern::{LightPatternPublic, LIGHT_PROFILES};
+use crate::libtkc::brightness::Brightness;
+use crate::libtkc::rgbcolor::RGBColor;
+use crate::libtkc::light_pattern::{LightPatternPublic, LIGHT_PROFILES};
 
 struct SupportedDevice<'a> {
     name : &'a str,
