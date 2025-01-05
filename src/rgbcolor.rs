@@ -1,4 +1,3 @@
-pub mod rgbcolor {
 use clap::ValueEnum;
 
 #[derive(ValueEnum, Clone, Copy, PartialEq, Eq, Debug)]
@@ -39,11 +38,9 @@ impl RGBColor {
     }
 }
 
-}
-
 #[cfg(test)]
 mod tests {
-    use crate::rgbcolor::rgbcolor::{RGBColor, ColorProfiles};
+    use crate::rgbcolor::{RGBColor, ColorProfiles};
 
     #[test]
     fn test_conersion_white() {

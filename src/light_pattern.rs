@@ -1,5 +1,3 @@
-pub mod light_pattern{
-
 use clap::ValueEnum;
 use strum_macros::EnumIter;
 
@@ -127,8 +125,9 @@ pub const LIGHT_PROFILES: &'static [&'static LightProfile; 19] = &[
         &LightProfile{pattern: LightPattern::music, speed: 9, direction: Direction::left},
 ];
 
+#[cfg(test)]
 #[test]
-pub fn priv_test_profile_address() {
+fn unit_test_profile_address() {
     let mut iter_exp = LightPattern::iter();
     let mut exp = None;
     for i in LightPatternPublic::r#static as usize..LightPatternPublic::music as usize {
@@ -141,17 +140,5 @@ pub fn priv_test_profile_address() {
             exp = iter_exp.next();
         }
         assert_eq!(LIGHT_PROFILES[i].pattern, exp.unwrap());
-    }
-}
-
-}
-
-#[cfg(test)]
-mod test {
-    use crate::light_pattern::light_pattern::{priv_test_profile_address, };
-
-    #[test]
-    fn unit_test_profile_address() {
-        priv_test_profile_address();
     }
 }
