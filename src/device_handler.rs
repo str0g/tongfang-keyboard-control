@@ -1,28 +1,10 @@
-
-pub mod device_handler {
-
 use std::io::ErrorKind;
 use futures_lite::future::block_on;
 use nusb::{self, };
-use clap::ValueEnum;
-pub use crate::rgbcolor::rgbcolor::RGBColor;
-pub use crate::light_pattern::light_pattern::{LightPatternPublic, LIGHT_PROFILES};
 
-#[derive(ValueEnum, Clone, Copy, PartialEq, Eq, Debug)]
-#[repr(u8)]
-pub enum Brightness {
-    #[allow(non_camel_case_types)]
-    off = 0x00,
-    #[allow(non_camel_case_types)]
-    low = 0x08,
-    #[allow(non_camel_case_types)]
-    med = 0x16,
-    #[allow(non_camel_case_types)]
-    high = 0x24,
-    #[allow(non_camel_case_types)]
-    max = 0x32,
-}
-
+use crate::brightness::Brightness;
+use crate::rgbcolor::RGBColor;
+use crate::light_pattern::{LightPatternPublic, LIGHT_PROFILES};
 
 struct SupportedDevice<'a> {
     name : &'a str,
@@ -94,6 +76,4 @@ impl DeviceHandler {
                 profile.direction as u8,
                 0x01]);
     }
-}
-
 }

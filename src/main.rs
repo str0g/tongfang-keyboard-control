@@ -1,14 +1,14 @@
 use clap::Parser;
 
+pub mod brightness;
 pub mod device_handler;
-pub mod rgbcolor;
 pub mod light_pattern;
+pub mod rgbcolor;
 
-use rgbcolor::rgbcolor::{RGBColor, ColorProfiles};
-use light_pattern::light_pattern::LightPatternPublic;
-use device_handler::device_handler::{
-    Brightness, DeviceHandler
-};
+use brightness::Brightness;
+use device_handler::DeviceHandler;
+use light_pattern::LightPatternPublic;
+use rgbcolor::{RGBColor, ColorProfiles};
 
 #[derive(Parser)]
 struct Args {
