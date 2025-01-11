@@ -10,6 +10,11 @@ use libtkc::rgbcolor::RGBColor;
 fn main() {
     let  args = Args::parse();
 
+#[cfg(feature = "completions")]
+    if args.completions {
+        return;
+    }
+
     let dev = DeviceHandler::new();
     println!("{:#?}", dev.name);
 

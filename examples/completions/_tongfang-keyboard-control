@@ -1,0 +1,40 @@
+#compdef tongfang-keyboard-control
+
+autoload -U is-at-least
+
+_tongfang-keyboard-control() {
+    typeset -A opt_args
+    typeset -a _arguments_options
+    local ret=1
+
+    if is-at-least 5.2; then
+        _arguments_options=(-s -S -C)
+    else
+        _arguments_options=(-s -C)
+    fi
+
+    local context curcontext="$curcontext" state line
+    _arguments "${_arguments_options[@]}" : \
+'-b+[]:BRIGTHNESS:(off low med high max)' \
+'--brigthness=[]:BRIGTHNESS:(off low med high max)' \
+'-c+[]:COLOR:(blue cyan gold green orange pink purple red white yellow)' \
+'--color=[]:COLOR:(blue cyan gold green orange pink purple red white yellow)' \
+'-p+[]:PATTERN:(static breathing wave-left wave-right wave-up wave-down reactive reactive-on-input rainbow ripple ripple-on-input marquee raindrop aurora aurora-on-input gamemod spark spark-on-input music)' \
+'--pattern=[]:PATTERN:(static breathing wave-left wave-right wave-up wave-down reactive reactive-on-input rainbow ripple ripple-on-input marquee raindrop aurora aurora-on-input gamemod spark spark-on-input music)' \
+'--completions[]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+}
+
+(( $+functions[_tongfang-keyboard-control_commands] )) ||
+_tongfang-keyboard-control_commands() {
+    local commands; commands=()
+    _describe -t commands 'tongfang-keyboard-control commands' commands "$@"
+}
+
+if [ "$funcstack[1]" = "_tongfang-keyboard-control" ]; then
+    _tongfang-keyboard-control "$@"
+else
+    compdef _tongfang-keyboard-control tongfang-keyboard-control
+fi
